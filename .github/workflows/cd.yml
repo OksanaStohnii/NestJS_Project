@@ -1,0 +1,42 @@
+name: Build and deploy to render
+
+on:
+  push:
+    brances:
+      - main
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build NestJS project
+        run: npm run build
+
+      - name: Set up Docker Build
+        uses: docker/setup-buildx-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/nest-js-project:latest
+          platform: linux/amd64
+
+      - name: Trigger Render deploy
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_URL }}
