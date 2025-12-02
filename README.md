@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="https://github.com/OksanaStohnii/nest-ci-demo/actions/workflows/ci.yml/badge.svg" alt="CI Status" />
+  <img src="https://github.com/OksanaStohnii/NestJS_Project/actions/workflows/ci.yml/badge.svg" alt="CI Status" />
 </p>
 
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
