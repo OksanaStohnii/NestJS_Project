@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: nest_postgres
+    restart: unless-stopped
+    env_file: .env.compose
+    environment:
+      NODE_ENV: development
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: nest_app
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    env_file: .env.compose
+    environment:
+      NODE_ENV: development
+    ports:
+      - '3000:3000'
+
+volumes:
+  postgres_data:

@@ -10,14 +10,18 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
+if (!process.env.DATABASE_URL) {
+  dotenv.config();
+}
+
+const isProduction = process.env.NODE_ENV === 'production';
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
       url: process.env.DATABASE_URL,
-      ssl: {
-        rejectUnauthorized: false,
-      },
+      ssl: isProduction ? { rejectUnauthorized: false } : false,
       entities: [UserEntity, BookEntity],
       synchronize: true,
       logging: false,
